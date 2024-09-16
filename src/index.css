@@ -1,0 +1,109 @@
+/* Example overrides for light theme */
+body {
+    background-color: #f0f0f0; /* Your light theme background color */
+    color: #333; /* Your light theme text color */
+}
+
+button {
+    background-color: #007bff; /* Your primary button color */
+    border: 1px solid #007bff; /* Your button border color */
+}
+
+button:hover {
+    background-color: #0056b3; /* Your button hover color */
+}
+
+/* Dark theme overrides */
+body.dark-mode {
+    background-color: #1b2531; /* Your dark theme background color */
+    color: #ffffff; /* Your dark theme text color */
+}
+
+button.dark-mode {
+    background-color: #007bff; /* Your primary button color in dark mode */
+    border: 1px solid #007bff; /* Your button border color in dark mode */
+}
+
+button.dark-mode:hover {
+    background-color: #0056b3; /* Your button hover color in dark mode */
+}
+
+
+.app-container {
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+  
+  .nes-text.is-primary {
+    color: #f0f8ff;
+  }
+  
+  .nes-input {
+    border: 2px solid #4a4a4a;
+  }
+  
+  .nes-btn.is-success {
+    background-color: #7cfc00;
+    border-color: #7cfc00;
+  }
+
+  /* App.css */
+.nes-container {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nes-container.with-title {
+    padding: 20px;
+  }
+  
+  .nes-text.is-primary {
+    color: #f0f8ff;
+  }
+  
+  .nes-btn {
+    margin: 10px;
+  }
+  
+  /* Ajustar para a barra lateral e conteúdo */
+  .ant-layout-sider {
+    background: #001529;
+  }
+  
+  .ant-layout-header {
+    background: #002140;
+    color: #ffffff;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+  }
+  
+  .ant-layout-content {
+    margin-top: 64px; /* altura da barra superior */
+  }
+  .card-title {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+  .card-title .ant-checkbox {
+    margin-right: 8px;
+  }
+
+  /* Adjust the size of the checkbox in the grid view */
+.card-checkbox {
+    transform: scale(1.5); /* Scale the checkbox */
+  }
+  
+  /* Custom row class for table */
+  .custom-table-row .ant-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    font-size: 18px; /* Increase font size to make checkbox appear larger */
+  }
+  
+  /* Optionally, adjust the size of the checkbox in the table view */
+  .custom-table-row .ant-checkbox {
+    transform: scale(1.5); /* Scale the checkbox */
+  }
