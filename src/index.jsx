@@ -4,14 +4,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/reset.css'
 import "nes.css/css/nes.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
+  <>
+    <App />
+  </>
 );
 
 // If you want your app to work offline and load faster, you can change

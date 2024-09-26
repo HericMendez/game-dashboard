@@ -50,12 +50,12 @@ const MenuItem = ({title, icon, path}) => {
 	}
 
 	return (
-		<div >
-			{icon && <Icon style={textStyle} type={icon} /> }
-			<span style={textStyle} >{setLocale(title)}</span>
-			{path && <Link onClick={closeMobileNav} to={path} />}
-		</div>
-	)
+    <div>
+      {icon && <Icon style={textStyle} type={icon} />}
+      <span style={textStyle}>{setLocale(title)}</span>
+      {path && <Link onClick={closeMobileNav} to={path} />}
+    </div>
+  );
 }
 
 const getSideNavMenuItem = (navItem) => navItem.map(nav => {

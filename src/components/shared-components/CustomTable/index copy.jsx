@@ -1,29 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Table, Tooltip, Button, Drawer, Tag, Input } from "antd";
+import React, { useState, useEffect, useCallback } from "react";
+import { Table, Tooltip, Button, Drawer, Tag } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import GameProfile from "../GameProfile";
 import igdbMockData from "mock/data/igdbMockData";
-
 const CustomTable = () => {
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [pagination, setPagination] = useState({ current: 1, total: 0 });
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [searchText, setSearchText] = useState(""); // Novo estado para busca
-
-  useEffect(() => {
-    // Inicialize os dados com os dados mockados
-    setLoading(true);
-    setData(igdbMockData);
-    setFilteredData(igdbMockData);
-    setPagination({
-      current: 1,
-      total: igdbMockData.length,
-    });
-    setLoading(false);
-  }, []);
 
   const showDrawer = (record) => {
     setSelectedRecord(record);
@@ -34,24 +19,9 @@ const CustomTable = () => {
     setOpen(false);
   };
 
+  // Função para deletar um item da lista
   const deleteItem = (record) => {
-    const newData = data.filter((item) => item.id !== record.id);
-    setData(newData);
-    setFilteredData(newData); // Atualiza os dados filtrados
-  };
-
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchText(value);
-    if (value) {
-      setFilteredData(
-        data.filter((item) =>
-          item.name.toLowerCase().includes(value.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredData(data);
-    }
+    setData((prevData) => prevData.filter((item) => item.id !== record.id));
   };
 
   const columns = [
@@ -65,12 +35,12 @@ const CustomTable = () => {
       title: "Empresa",
       dataIndex: "involved_companies",
       width: "20%",
-      render: (companies = []) => (
+      render: (record) => (
         <>
-          {companies.map((item, index) => (
+          {record.map((item, index) => (
             <span key={index} style={{ fontSize: 10 }}>
-              {item.company?.name || "Unknown Company"}
-              {index < companies.length - 1 && ", "}
+              {item.company.name}
+              {index < record.length - 1 && ", "}
             </span>
           ))}
         </>
@@ -79,13 +49,12 @@ const CustomTable = () => {
     {
       title: "Gênero",
       dataIndex: "genres",
-      render: (genres = []) => (
+
+      render: (genres) => (
         <>
           {genres.map((genre, index) => (
             <Tag key={genre.id} color={index % 2 === 0 ? "green" : "blue"}>
-              <span style={{ fontSize: 10 }}>
-                {genre.name || "Unknown Genre"}
-              </span>
+              <span style={{ fontSize: 10 }}>{genre.name}</span>
             </Tag>
           ))}
         </>
@@ -95,21 +64,21 @@ const CustomTable = () => {
       title: "Plataformas",
       dataIndex: "platforms",
       width: "20%",
-      render: (platforms = []) => (
+      render: (platforms) => (
         <>
-          {platforms.map((platform) => (
-            <Tag key={platform.id} color="red">
-              <span style={{ fontSize: 10 }}>
-                {platform.name || "Unknown Platform"}
-              </span>
+          {platforms.map((genre) => (
+            <Tag key={genre.id} color="red">
+              <span style={{ fontSize: 10 }}>{genre.name}</span>
             </Tag>
           ))}
         </>
       ),
     },
+
     {
       title: "",
       dataIndex: "",
+
       render: (record) => (
         <div className="d-flex justify-content-end align-items-end">
           <>
@@ -139,24 +108,54 @@ const CustomTable = () => {
     },
   ];
 
+  const fetchData = useCallback((params = {}) => {
+    setLoading(true);
+    fetch(`https://randomuser.me/api?results=10&page=${params.page || 1}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setPagination((prev) => ({
+          ...prev,
+          total: 200, // Exemplo, a total de registros
+        }));
+        setData(data.results);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    const pager = { ...pagination };
+    pager.current = pagination.current;
+    setPagination(pager);
+    fetchData({
+      results: pagination.pageSize,
+      page: pagination.current,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      ...filters,
+    });
+  };
+
   return (
     <>
-      <Input
-        placeholder="Buscar por nome do jogo"
-        value={searchText}
-        onChange={handleSearch}
-        style={{ marginBottom: 16 }}
-      />
       <Table
         columns={columns}
         rowKey={(record) => record.id}
-        dataSource={filteredData} // Usando dados filtrados
+        dataSource={igdbMockData}
         pagination={pagination}
         loading={loading}
+        onChange={handleTableChange}
       />
 
       <Drawer
-        title={"Detalhes do jogo"}
+        title={"Detalhes do"}
         placement="right"
         onClose={onClose}
         open={open}
